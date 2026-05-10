@@ -28,6 +28,11 @@ import {
   FileText,
   MessageCircle,
   ImageIcon,
+  Code2,
+  ShoppingBag,
+  Brush,
+  Building2,
+  GraduationCap,
 } from "lucide-react";
 
 const tokenData = [
@@ -114,11 +119,11 @@ const features = [
 ];
 
 const users = [
-  { emoji: "🧑‍💻", title: "AI 工具开发者", desc: "无需重复造轮子，快速完成鉴权、计费和模型抽象。" },
-  { emoji: "🛒", title: "电商卖家", desc: "在统一成本管控下，为店铺提供 AI 搜索、文案和客服能力。" },
-  { emoji: "🎨", title: "设计工作室", desc: "为客户提供 AI 辅助工作流，并按项目设置独立预算。" },
-  { emoji: "🚀", title: "小型 SaaS 团队", desc: "无需专属 ML 运维预算，即可将 AI 功能嵌入你的产品。" },
-  { emoji: "🎓", title: "学生创业团队", desc: "在有限预算内用真实模型快速原型验证，告别意外账单。" },
+  { icon: <Code2 size={20} />, title: "AI 工具开发者", desc: "快速接入模型、计费与用量追踪。" },
+  { icon: <ShoppingBag size={20} />, title: "电商卖家", desc: "统一管理客服、文案和搜索成本。" },
+  { icon: <Brush size={20} />, title: "设计工作室", desc: "按项目控制生成任务与客户预算。" },
+  { icon: <Building2 size={20} />, title: "小型 SaaS 团队", desc: "把 AI 能力接进产品后台。" },
+  { icon: <GraduationCap size={20} />, title: "学生创业团队", desc: "用有限预算验证真实 AI 功能。" },
 ];
 
 const pricingPlans = [
@@ -1196,11 +1201,13 @@ export default function App() {
             {users.map((u) => (
               <div
                 key={u.title}
-                className="group p-5 rounded-2xl border border-[rgba(30,110,255,0.12)] hover:border-[rgba(30,110,255,0.3)] transition-all duration-200 text-center hover:shadow-[0_0_24px_rgba(30,110,255,0.08)] cursor-default"
-                style={{ background: "rgba(12,21,38,0.8)" }}
+                className="group p-5 rounded-2xl border border-[rgba(30,110,255,0.13)] hover:border-[rgba(30,110,255,0.38)] transition-all duration-200 hover:shadow-[0_0_30px_rgba(30,110,255,0.12)] cursor-default text-left"
+                style={{ background: "linear-gradient(145deg, rgba(12,21,38,0.92), rgba(15,30,54,0.68))" }}
               >
-                <div className="text-3xl mb-3">{u.emoji}</div>
-                <h3 className="text-sm font-semibold mb-1.5" style={{ fontFamily: "'Sora', sans-serif" }}>{u.title}</h3>
+                <div className="w-10 h-10 rounded-xl flex items-center justify-center mb-4 text-accent border border-[rgba(30,110,255,0.18)] group-hover:shadow-[0_0_18px_rgba(0,194,255,0.18)] transition-all" style={{ background: "rgba(30,110,255,0.1)" }}>
+                  {u.icon}
+                </div>
+                <h3 className="text-sm font-semibold mb-2" style={{ fontFamily: "'Sora', sans-serif" }}>{u.title}</h3>
                 <p className="text-xs text-muted-foreground leading-relaxed">{u.desc}</p>
               </div>
             ))}

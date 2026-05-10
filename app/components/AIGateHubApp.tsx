@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { type ReactNode, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import {
   demoUserId,
@@ -37,6 +37,16 @@ import {
   FileText,
   MessageCircle,
   ImageIcon,
+  Code2,
+  ShoppingBag,
+  Brush,
+  Building2,
+  GraduationCap,
+  KeyRound,
+  LogIn,
+  Mail,
+  Smartphone,
+  Github,
 } from "lucide-react";
 
 const tokenData = [
@@ -123,11 +133,11 @@ const features = [
 ];
 
 const users = [
-  { emoji: "🧑‍💻", title: "AI 工具开发者", desc: "无需重复造轮子，快速完成鉴权、计费和模型抽象。" },
-  { emoji: "🛒", title: "电商卖家", desc: "在统一成本管控下，为店铺提供 AI 搜索、文案和客服能力。" },
-  { emoji: "🎨", title: "设计工作室", desc: "为客户提供 AI 辅助工作流，并按项目设置独立预算。" },
-  { emoji: "🚀", title: "小型 SaaS 团队", desc: "无需专属 ML 运维预算，即可将 AI 功能嵌入你的产品。" },
-  { emoji: "🎓", title: "学生创业团队", desc: "在有限预算内用真实模型快速原型验证，告别意外账单。" },
+  { icon: <Code2 size={20} />, title: "AI 工具开发者", desc: "快速接入模型、计费与用量追踪。" },
+  { icon: <ShoppingBag size={20} />, title: "电商卖家", desc: "统一管理客服、文案和搜索成本。" },
+  { icon: <Brush size={20} />, title: "设计工作室", desc: "按项目控制生成任务与客户预算。" },
+  { icon: <Building2 size={20} />, title: "小型 SaaS 团队", desc: "把 AI 能力接进产品后台。" },
+  { icon: <GraduationCap size={20} />, title: "学生创业团队", desc: "用有限预算验证真实 AI 功能。" },
 ];
 
 const pricingPlans = [
@@ -225,7 +235,7 @@ type UsageRecord = {
   responseTime: string;
 };
 
-type AppView = "landing" | "dashboard" | "chat" | "image2" | "usage";
+type AppView = "landing" | "dashboard" | "chat" | "image2" | "usage" | "login" | "register" | "docs" | "apikeys";
 
 const usageStorageKey = "aigatehub_usage_records";
 const usageBudget = 30;
@@ -804,6 +814,147 @@ function UsagePage({ records, onBack }: { records: UsageRecord[]; onBack: () => 
   );
 }
 
+function PlatformInfoPage({
+  title,
+  eyebrow,
+  description,
+  icon,
+  onBack,
+}: {
+  title: string;
+  eyebrow: string;
+  description: string;
+  icon: ReactNode;
+  onBack: () => void;
+}) {
+  return (
+    <div className="min-h-screen bg-background text-foreground px-6 py-8" style={{ fontFamily: "'Inter', sans-serif" }}>
+      <div className="max-w-5xl mx-auto">
+        <header className="flex items-center justify-between mb-10">
+          <div className="flex items-center gap-3">
+            <div className="w-9 h-9 rounded-xl flex items-center justify-center text-white" style={{ background: "linear-gradient(135deg, #1e6eff, #00c2ff)" }}>
+              {icon}
+            </div>
+            <span className="font-bold text-lg" style={{ fontFamily: "'Sora', sans-serif" }}>AIGateHub</span>
+          </div>
+          <button
+            onClick={onBack}
+            className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold border border-[rgba(30,110,255,0.3)] hover:border-[rgba(30,110,255,0.6)] hover:bg-white/5 transition-all"
+          >
+            <ChevronRight size={16} className="rotate-180" />
+            返回首页
+          </button>
+        </header>
+
+        <section className="rounded-3xl border border-[rgba(30,110,255,0.18)] p-8 md:p-12 overflow-hidden relative" style={{ background: "linear-gradient(145deg, rgba(12,21,38,0.95), rgba(15,30,54,0.82))" }}>
+          <div className="absolute inset-0 pointer-events-none opacity-40" style={{ background: "radial-gradient(circle at 18% 10%, rgba(30,110,255,0.35), transparent 28%), radial-gradient(circle at 80% 70%, rgba(0,194,255,0.2), transparent 30%)" }} />
+          <div className="relative max-w-2xl">
+            <p className="text-xs uppercase tracking-widest text-accent mb-4 font-semibold" style={{ fontFamily: "'JetBrains Mono', monospace" }}>{eyebrow}</p>
+            <h1 className="text-3xl md:text-5xl font-extrabold mb-5" style={{ fontFamily: "'Sora', sans-serif" }}>{title}</h1>
+            <p className="text-muted-foreground leading-relaxed mb-8">{description}</p>
+            <div className="grid sm:grid-cols-3 gap-3">
+              {["安全接入", "额度控制", "用量分析"].map((item) => (
+                <div key={item} className="rounded-2xl border border-[rgba(30,110,255,0.14)] p-4" style={{ background: "rgba(5,10,20,0.42)" }}>
+                  <CheckCircle size={16} className="text-emerald-400 mb-2" />
+                  <p className="text-sm font-semibold">{item}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+  );
+}
+
+function AuthPage({ mode, onSwitch, onBack }: { mode: "login" | "register"; onSwitch: () => void; onBack: () => void }) {
+  const isLogin = mode === "login";
+  const mockAuth = () => {
+    window.alert("登录功能将在正式版本开放，目前为演示模式。");
+  };
+  const options = isLogin
+    ? [
+        { label: "使用 Google 登录", icon: <LogIn size={18} /> },
+        { label: "使用 GitHub 登录", icon: <Github size={18} /> },
+        { label: "手机号登录 / 注册", icon: <Smartphone size={18} /> },
+        { label: "邮箱登录 / 注册", icon: <Mail size={18} /> },
+      ]
+    : [
+        { label: "Google 注册", icon: <LogIn size={18} /> },
+        { label: "GitHub 注册", icon: <Github size={18} /> },
+        { label: "手机号注册", icon: <Smartphone size={18} /> },
+        { label: "邮箱注册", icon: <Mail size={18} /> },
+      ];
+
+  return (
+    <div className="min-h-screen bg-background text-foreground px-6 py-8 flex items-center" style={{ fontFamily: "'Inter', sans-serif" }}>
+      <div className="max-w-6xl mx-auto w-full grid lg:grid-cols-[1.05fr_0.95fr] gap-8 items-center">
+        <section className="relative overflow-hidden rounded-3xl border border-[rgba(30,110,255,0.18)] p-8 md:p-10 min-h-[560px] flex flex-col justify-between" style={{ background: "linear-gradient(145deg, rgba(12,21,38,0.98), rgba(5,10,20,0.92))" }}>
+          <div className="absolute inset-0 pointer-events-none opacity-50" style={{ background: "radial-gradient(circle at 20% 16%, rgba(30,110,255,0.42), transparent 30%), radial-gradient(circle at 85% 75%, rgba(0,194,255,0.2), transparent 32%)" }} />
+          <div className="relative">
+            <div className="flex items-center gap-3 mb-10">
+              <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ background: "linear-gradient(135deg, #1e6eff, #00c2ff)" }}>
+                <Zap size={18} className="text-white" />
+              </div>
+              <span className="font-bold text-xl" style={{ fontFamily: "'Sora', sans-serif" }}>AIGateHub</span>
+            </div>
+            <p className="text-xs uppercase tracking-widest text-accent mb-4 font-semibold" style={{ fontFamily: "'JetBrains Mono', monospace" }}>AI API Control Plane</p>
+            <h1 className="text-4xl md:text-5xl font-extrabold leading-tight mb-5" style={{ fontFamily: "'Sora', sans-serif" }}>
+              管理模型、余额和每一次 API 调用。
+            </h1>
+            <p className="text-muted-foreground leading-relaxed max-w-lg">
+              为小团队准备的统一网关控制台。把 API Key、用户额度、调用记录和成本分析放进一个稳定的工作台。
+            </p>
+          </div>
+          <div className="relative grid sm:grid-cols-3 gap-3 mt-10">
+            {["API Key", "Usage Logs", "Billing"].map((item) => (
+              <div key={item} className="rounded-2xl p-4 border border-[rgba(30,110,255,0.14)]" style={{ background: "rgba(15,30,54,0.58)" }}>
+                <p className="text-xs text-muted-foreground mb-1">{item}</p>
+                <p className="text-sm text-accent font-semibold">Ready</p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        <section className="rounded-3xl border border-[rgba(30,110,255,0.2)] p-7 md:p-8 shadow-[0_0_70px_rgba(30,110,255,0.12)]" style={{ background: "rgba(12,21,38,0.9)" }}>
+          <button onClick={onBack} className="text-xs text-muted-foreground hover:text-foreground mb-8 transition-colors">
+            返回首页
+          </button>
+          <h2 className="text-2xl md:text-3xl font-bold mb-2" style={{ fontFamily: "'Sora', sans-serif" }}>
+            {isLogin ? "登录 AIGateHub" : "注册 AIGateHub"}
+          </h2>
+          <p className="text-sm text-muted-foreground mb-7">
+            {isLogin ? "管理你的 API Key、余额和用量记录" : "创建账户后即可开始测试 Chat、Image2 和用量记录"}
+          </p>
+
+          <div className="space-y-3">
+            {options.map((option) => (
+              <button
+                key={option.label}
+                onClick={mockAuth}
+                className="w-full flex items-center justify-between px-4 py-3.5 rounded-xl text-sm font-semibold border border-[rgba(30,110,255,0.16)] hover:border-[rgba(30,110,255,0.5)] hover:bg-white/5 transition-all"
+              >
+                <span className="inline-flex items-center gap-3">
+                  <span className="w-8 h-8 rounded-lg flex items-center justify-center text-accent" style={{ background: "rgba(30,110,255,0.1)" }}>{option.icon}</span>
+                  {option.label}
+                </span>
+                <ChevronRight size={16} className="text-muted-foreground" />
+              </button>
+            ))}
+          </div>
+
+          <div className="mt-7 pt-5 border-t border-[rgba(30,110,255,0.12)] flex items-center justify-between gap-4 text-sm text-muted-foreground">
+            <span>{isLogin ? "还没有账户？" : "已有账户？"}</span>
+            <button onClick={onSwitch} className="text-accent hover:text-foreground transition-colors font-semibold">
+              {isLogin ? "创建新账户" : "返回登录页"}
+            </button>
+          </div>
+        </section>
+      </div>
+    </div>
+  );
+}
+
 function DashboardPage({
   onBack,
   onOpenChat,
@@ -918,31 +1069,16 @@ export default function AIGateHubApp({ view, scrollTarget }: { view: AppView; sc
   const usageStats = getUsageStats(usageRecords);
 
   const navLinks = [
-    { label: "功能", id: "features" },
-    { label: "价格", id: "pricing" },
-    { label: "文档", id: "docs" },
-    { label: "博客", id: "blog" },
-    { label: "联系", id: "contact" },
+    { label: "模型价格", href: "/model-pricing" },
+    { label: "文档", href: "/docs" },
+    { label: "API Key", href: "/apikeys" },
+    { label: "控制台", href: "/dashboard" },
+    { label: "联系我们", href: "/contact" },
   ];
 
-  const handleNav = (id: string) => {
+  const handleNav = (href: string) => {
     setMobileOpen(false);
-    if (currentView === "landing") {
-      scrollTo(id);
-      return;
-    }
-
-    if (id === "pricing") {
-      router.push("/pricing");
-      return;
-    }
-
-    if (id === "contact") {
-      router.push("/contact");
-      return;
-    }
-
-    router.push(`/#${id}`);
+    router.push(href);
   };
 
   const showDashboard = () => {
@@ -1040,6 +1176,38 @@ export default function AIGateHubApp({ view, scrollTarget }: { view: AppView; sc
     return <UsagePage records={usageRecords} onBack={() => router.push("/dashboard")} />;
   }
 
+  if (currentView === "login") {
+    return <AuthPage mode="login" onBack={showLanding} onSwitch={() => router.push("/register")} />;
+  }
+
+  if (currentView === "register") {
+    return <AuthPage mode="register" onBack={showLanding} onSwitch={() => router.push("/login")} />;
+  }
+
+  if (currentView === "docs") {
+    return (
+      <PlatformInfoPage
+        title="开发文档"
+        eyebrow="Documentation"
+        description="查看 API 调用规范、鉴权方式、额度扣费和模型路由说明。正式文档会随着真实 API 接入逐步完善。"
+        icon={<FileText size={18} />}
+        onBack={showLanding}
+      />
+    );
+  }
+
+  if (currentView === "apikeys") {
+    return (
+      <PlatformInfoPage
+        title="API Key 管理"
+        eyebrow="Credential Center"
+        description="集中创建、停用和审计 API Key。当前为演示界面，后续会接入用户登录与服务端密钥管理。"
+        icon={<KeyRound size={18} />}
+        onBack={showLanding}
+      />
+    );
+  }
+
   return (
     <div className="min-h-screen bg-background text-foreground overflow-x-hidden" style={{ fontFamily: "'Inter', sans-serif" }}>
 
@@ -1056,8 +1224,8 @@ export default function AIGateHubApp({ view, scrollTarget }: { view: AppView; sc
           <div className="hidden md:flex items-center gap-8 text-sm text-muted-foreground">
             {navLinks.map((item) => (
               <button
-                key={item.id}
-                onClick={() => handleNav(item.id)}
+                key={item.href}
+                onClick={() => handleNav(item.href)}
                 className="hover:text-foreground transition-colors duration-200 cursor-pointer bg-transparent border-none p-0"
               >
                 {item.label}
@@ -1066,7 +1234,10 @@ export default function AIGateHubApp({ view, scrollTarget }: { view: AppView; sc
           </div>
 
           <div className="hidden md:flex items-center gap-3">
-            <button className="text-sm text-muted-foreground hover:text-foreground transition-colors duration-200 px-4 py-2 rounded-lg hover:bg-white/5 active:scale-95">
+            <button
+              onClick={() => router.push("/login")}
+              className="text-sm text-muted-foreground hover:text-foreground transition-colors duration-200 px-4 py-2 rounded-lg hover:bg-white/5 active:scale-95"
+            >
               登录
             </button>
             <button
@@ -1090,15 +1261,18 @@ export default function AIGateHubApp({ view, scrollTarget }: { view: AppView; sc
           <div className="md:hidden border-t border-[rgba(30,110,255,0.12)] px-6 py-4 space-y-1" style={{ background: "rgba(5,10,20,0.97)" }}>
             {navLinks.map((item) => (
               <button
-                key={item.id}
-                onClick={() => handleNav(item.id)}
+                key={item.href}
+                onClick={() => handleNav(item.href)}
                 className="block w-full text-left text-sm text-muted-foreground hover:text-foreground py-2.5 px-2 rounded-lg hover:bg-white/5 transition-colors"
               >
                 {item.label}
               </button>
             ))}
             <div className="pt-2 border-t border-[rgba(30,110,255,0.1)] mt-2">
-              <button className="block w-full text-left text-sm text-muted-foreground hover:text-foreground py-2.5 px-2 rounded-lg hover:bg-white/5 transition-colors">
+              <button
+                onClick={() => router.push("/login")}
+                className="block w-full text-left text-sm text-muted-foreground hover:text-foreground py-2.5 px-2 rounded-lg hover:bg-white/5 transition-colors"
+              >
                 登录
               </button>
               <button
@@ -1145,13 +1319,13 @@ export default function AIGateHubApp({ view, scrollTarget }: { view: AppView; sc
                 className="flex items-center gap-2 px-6 py-3 rounded-xl font-semibold text-white text-sm transition-all duration-200 hover:scale-105 active:scale-95 shadow-[0_0_24px_rgba(30,110,255,0.4)] hover:shadow-[0_0_36px_rgba(30,110,255,0.6)]"
                 style={{ background: "linear-gradient(135deg, #1e6eff, #00c2ff)" }}
               >
-                免费咨询 <ArrowRight size={16} />
+                立即开始 <ArrowRight size={16} />
               </button>
               <button
-                onClick={showDashboard}
+                onClick={() => router.push("/docs")}
                 className="flex items-center gap-2 px-6 py-3 rounded-xl font-semibold text-sm border border-[rgba(30,110,255,0.3)] text-foreground hover:border-[rgba(30,110,255,0.6)] hover:bg-white/5 active:scale-95 transition-all duration-200"
               >
-                查看演示 <ChevronRight size={16} />
+                查看文档 <ChevronRight size={16} />
               </button>
             </div>
             <div className="mt-5">
@@ -1293,11 +1467,13 @@ export default function AIGateHubApp({ view, scrollTarget }: { view: AppView; sc
             {users.map((u) => (
               <div
                 key={u.title}
-                className="group p-5 rounded-2xl border border-[rgba(30,110,255,0.12)] hover:border-[rgba(30,110,255,0.3)] transition-all duration-200 text-center hover:shadow-[0_0_24px_rgba(30,110,255,0.08)] cursor-default"
-                style={{ background: "rgba(12,21,38,0.8)" }}
+                className="group p-5 rounded-2xl border border-[rgba(30,110,255,0.13)] hover:border-[rgba(30,110,255,0.38)] transition-all duration-200 hover:shadow-[0_0_30px_rgba(30,110,255,0.12)] cursor-default text-left"
+                style={{ background: "linear-gradient(145deg, rgba(12,21,38,0.92), rgba(15,30,54,0.68))" }}
               >
-                <div className="text-3xl mb-3">{u.emoji}</div>
-                <h3 className="text-sm font-semibold mb-1.5" style={{ fontFamily: "'Sora', sans-serif" }}>{u.title}</h3>
+                <div className="w-10 h-10 rounded-xl flex items-center justify-center mb-4 text-accent border border-[rgba(30,110,255,0.18)] group-hover:shadow-[0_0_18px_rgba(0,194,255,0.18)] transition-all" style={{ background: "rgba(30,110,255,0.1)" }}>
+                  {u.icon}
+                </div>
+                <h3 className="text-sm font-semibold mb-2" style={{ fontFamily: "'Sora', sans-serif" }}>{u.title}</h3>
                 <p className="text-xs text-muted-foreground leading-relaxed">{u.desc}</p>
               </div>
             ))}
